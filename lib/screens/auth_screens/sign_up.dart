@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shaadi_book/my_app_config/app_color_constants.dart';
 import 'package:shaadi_book/my_app_config/app_font_family.dart';
 import 'package:shaadi_book/my_app_config/app_font_size_constants.dart';
 import 'package:shaadi_book/screens/auth_screens/custom_form_text_field/email_text_field.dart';
 import 'package:shaadi_book/screens/auth_screens/custom_form_text_field/password_field.dart';
+import 'package:shaadi_book/screens/auth_screens/custom_form_text_field/phonenumber_text_field.dart';
 import 'package:shaadi_book/screens/auth_screens/login.dart';
 import 'package:shaadi_book/screens/auth_screens/user_name_text_field.dart';
-import 'package:shaadi_book/screens/utils/alert_screen.dart';
+
+import '../../Controller/register_controller_api.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -17,10 +20,9 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  final _userNameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
   bool _isChecked = false;
+
+  final register = Get.put(RegisterControllerApi());
 
   @override
   Widget build(BuildContext context) {
@@ -86,39 +88,37 @@ class _SignUpState extends State<SignUp> {
                                     const SizedBox(height: 20.0),
                                     // User name
                                     UserNameTextField(
-                                      userNameController: _userNameController,
+                                      userNameController:
+                                          register.nameController,
                                     ),
                                     const SizedBox(height: 12.0),
                                     // Email field
+                                    PhonenumberTextFiled(
+                                        phonenumberController:register.mobilenumberController,
+                                        colors:AppColorConstant.formBorderColor),
+                                    const SizedBox(height: 12.0),
+                                    // Phone number field
                                     EmailTextField(
-                                      emailController: _emailController,
+                                      emailController: register.emailController,
                                     ),
                                     const SizedBox(height: 12.0),
                                     // Password field
                                     PasswordField(
-                                      passwordController: _passwordController,
+                                      passwordController:
+                                          register.passwordController,
                                       hint: 'Password',
                                     ),
                                     const SizedBox(height: 20.0),
                                     // Remember me
                                     _buildRememberMe(),
                                     const SizedBox(height: 28.0),
+
                                     // login button
                                     SizedBox(
                                       width: double.infinity,
                                       child: ElevatedButton(
                                         onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            CupertinoPageRoute(
-                                              builder: (context) =>
-                                                  const AlertScreen(
-                                                title: 'Congratulation',
-                                                mssg:
-                                                    'You have signed Up\nsuccessfully.',
-                                              ),
-                                            ),
-                                          );
+                                          register.registerProvider(context);
                                         },
                                         child: const Text('Next'),
                                       ),
@@ -127,12 +127,7 @@ class _SignUpState extends State<SignUp> {
                                     const SizedBox(height: 20.0),
                                     InkWell(
                                       onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          CupertinoPageRoute(
-                                            builder: (context) => const Login(),
-                                          ),
-                                        );
+                                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => Login(),));
                                       },
                                       child: Text(
                                         'Already have an account?',

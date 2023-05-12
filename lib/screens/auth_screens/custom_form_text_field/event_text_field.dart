@@ -1,24 +1,30 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:shaadi_book/my_app_config/app_color_constants.dart';
 import 'package:shaadi_book/my_app_config/app_font_family.dart';
 import 'package:shaadi_book/my_app_config/app_font_size_constants.dart';
 
-class EventTextField extends StatelessWidget {
-  const EventTextField({
-    Key? key,
-    required TextEditingController eventController,
-  })  : _eventController = eventController,
-        super(key: key);
+import '../../../Controller/search_event_id_controller.dart';
 
-  final TextEditingController _eventController;
+class EventTextField extends StatefulWidget {
+  final TextEditingController eventController;
+  EventTextField({Key? key, required this.eventController}) : super(key: key);
+
+  @override
+  State<EventTextField> createState() => _EventTextFieldState();
+}
+
+class _EventTextFieldState extends State<EventTextField> {
+  SearcheventIdController eventShow = Get.put(SearcheventIdController());
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       keyboardType: TextInputType.text,
       autofocus: false,
-      controller: _eventController,
+      controller: widget.eventController,
       style: TextStyle(
         fontWeight: FontWeight.normal,
         fontFamily: kantumruy,
@@ -28,6 +34,20 @@ class EventTextField extends StatelessWidget {
       decoration: InputDecoration(
         fillColor: Colors.white,
         hintText: 'Event Id',
+        suffixIcon: Align(
+          heightFactor: 1.0,
+          widthFactor: 1.0,
+          child: IconButton(
+            icon: Icon(CupertinoIcons.search),
+            onPressed: () async {
+              setState(() {
+                eventShow
+                    .searcheventID(eventID: widget.eventController.text)
+                    .whenComplete(() => widget.eventController.clear());
+              });
+            },
+          ),
+        ),
         prefixIcon: Align(
           heightFactor: 1.0,
           widthFactor: 1.0,

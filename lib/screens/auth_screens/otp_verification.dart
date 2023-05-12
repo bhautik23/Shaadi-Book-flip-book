@@ -1,16 +1,22 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
+import 'package:shaadi_book/Service/Firebase_serivce.dart';
 import 'package:shaadi_book/my_app_config/app_color_constants.dart';
 import 'package:shaadi_book/my_app_config/app_font_family.dart';
 import 'package:shaadi_book/my_app_config/app_font_size_constants.dart';
-import 'package:shaadi_book/screens/auth_screens/forget_password/reset_password.dart';
+import 'package:shaadi_book/screens/auth_screens/custom_form_text_field/phonenumber_text_field.dart';
 import 'package:shaadi_book/screens/utils/custom_back_button.dart';
 
 class OtpVerification extends StatefulWidget {
-  const OtpVerification({super.key});
+  TextEditingController? controller;
+  OtpVerification({super.key, this.controller});
 
   @override
   State<OtpVerification> createState() => _OtpVerificationState();
@@ -19,6 +25,8 @@ class OtpVerification extends StatefulWidget {
 class _OtpVerificationState extends State<OtpVerification> {
   final controller = TextEditingController();
   final focusNode = FocusNode();
+  var phonenumberController = TextEditingController();
+  final firebaseService = Get.put(FirebaseService());
 
   @override
   void dispose() {
@@ -26,6 +34,15 @@ class _OtpVerificationState extends State<OtpVerification> {
     focusNode.dispose();
     super.dispose();
   }
+
+  @override
+  void initState() {
+    firebaseService.sendOtp(phonenumberController: widget.controller);
+    super.initState();
+  }
+
+  FirebaseAuth auth = FirebaseAuth.instance;
+  String verificationID = "";
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +78,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                     const SizedBox(height: 24.0),
                     // Title
                     Text(
-                      'Enter 4-digit Verification code',
+                      'Enter 6-digit Verification code',
                       style: TextStyle(
                         fontFamily: kantumruy,
                         color: AppColorConstant.fontColor,
@@ -72,7 +89,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                     ),
                     // sub Title
                     Text(
-                      'Code send to +6282045**** .\nThis code will expired in 01:30',
+                      'Code send to +91 12345**** .\nThis code will expired in 01:30',
                       style: TextStyle(
                         fontFamily: kantumruy,
                         color: AppColorConstant.fontColor,
@@ -80,6 +97,21 @@ class _OtpVerificationState extends State<OtpVerification> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
+                    const SizedBox(height: 34.0),
+                    // Phone Number Field
+                    // PhonenumberTextFiled(
+                    //   phonenumberController: phonenumberController,
+                    //   colors: Color(0xffB1B9C6),
+                    // ),
+                    // MaterialButton(
+                    //   onPressed: () async {
+                    //     firebaseService.sendOtp(
+                    //         phonenumberController: phonenumberController.text);
+                    //   },
+                    //   child: Text("Send OTP"),
+                    //   color: Colors.deepPurple.withOpacity(.9),
+                    //   elevation: 0,
+                    // ),
                     const SizedBox(height: 34.0),
                     // Otp Field
                     Center(
@@ -94,7 +126,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                           ),
                         ),
                         child: Pinput(
-                          length: 4,
+                          length: 6,
                           controller: controller,
                           focusNode: focusNode,
                           separator: Container(
@@ -121,12 +153,13 @@ class _OtpVerificationState extends State<OtpVerification> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) => const ResetPassword(),
-                        ),
-                      );
+                      firebaseService.verifiyOtp(context, controller);
+                      // Navigator.push(
+                      //   context,4
+                      //   CupertinoPageRoute(
+                      //     builder: (context) => const ResetPassword(),
+                      //   ),
+                      // );
                     },
                     child: const Text('Next'),
                   ),

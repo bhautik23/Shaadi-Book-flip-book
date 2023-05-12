@@ -2,15 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:shaadi_book/screens/event_screens/album.dart';
 import 'package:shaadi_book/screens/utils/custom_back_button.dart';
 
+import '../../Controller/getprojectdata_controller_api.dart';
 import '../../my_app_config/app_color_constants.dart';
 import '../../my_app_config/app_font_family.dart';
 import '../../my_app_config/app_font_size_constants.dart';
 
 class EventVideoAndAlbum extends StatefulWidget {
-  const EventVideoAndAlbum({super.key});
+  String eventId;
+  var Id;
+  EventVideoAndAlbum({super.key, required this.eventId, required this.Id});
 
   @override
   State<EventVideoAndAlbum> createState() => _EventVideoAndAlbumState();
@@ -20,7 +24,17 @@ class _EventVideoAndAlbumState extends State<EventVideoAndAlbum> {
   Future<void> _flipBook() async {
     // platform.send(_pong);
     const platform = MethodChannel("mycall");
-    // var result = await platform.invokeMethod("mycall", {"text": "Mostak"});
+    var result = await platform.invokeMethod("mycall", {"text": "Mostak"});
+  }
+
+  GetProjectDataController getProjectDataController =
+      Get.put(GetProjectDataController());
+
+  @override
+  void initState() {
+    getProjectDataController.getProjectData(
+        eventId: widget.eventId, id: widget.Id);
+    super.initState();
   }
 
   @override

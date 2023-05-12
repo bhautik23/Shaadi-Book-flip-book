@@ -9,7 +9,10 @@ import 'package:shaadi_book/screens/event_screens/event_video_and_album.dart';
 class EventItem extends StatefulWidget {
   final String event;
   final String image;
-  const EventItem({super.key, required this.event, required this.image});
+  final int id;
+  var eventId;
+  // Function onTap;
+   EventItem({super.key, required this.event, required this.image,required this.id,required this.eventId,});
 
   @override
   State<EventItem> createState() => _EventItemState();
@@ -30,14 +33,12 @@ class _EventItemState extends State<EventItem> {
       ),
       child: InkWell(
         onTap: () {
-          if (widget.event == 'Engagement') {
             Navigator.push(
               context,
               CupertinoPageRoute(
-                builder: (context) => const EventVideoAndAlbum(),
+                builder: (context) =>  EventVideoAndAlbum(eventId: widget.eventId,Id: widget.id),
               ),
             );
-          }
         },
         child: Container(
           decoration: BoxDecoration(

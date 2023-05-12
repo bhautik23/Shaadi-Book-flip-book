@@ -1,13 +1,18 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shaadi_book/screens/get_started/get_started.dart';
 import 'package:shaadi_book/screens/splash_screen.dart';
 
 import 'my_app_config/app_theme.dart';
 
 Future<void> main() async {
+  await GetStorage.init();
+  dataStorage = GetStorage();
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -15,6 +20,10 @@ Future<void> main() async {
   ]).then((value) => runApp(const MyApp()));
   runApp(const MyApp());
 }
+
+//create local dataStorage global variable
+
+GetStorage dataStorage = GetStorage();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -54,6 +63,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return _isSplash ? const SplashScreen() : const GetStarted();
+    return _isSplash ? const SplashScreen() : GetStarted();
   }
 }

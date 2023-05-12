@@ -1,24 +1,48 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 import 'package:shaadi_book/my_app_config/app_color_constants.dart';
 import 'package:shaadi_book/my_app_config/app_font_family.dart';
 import 'package:shaadi_book/my_app_config/app_font_size_constants.dart';
-import 'package:shaadi_book/screens/auth_screens/forget_password/forget_password_card.dart';
-import 'package:shaadi_book/screens/auth_screens/otp_verification.dart';
+import 'package:shaadi_book/screens/auth_screens/custom_form_text_field/email_text_field.dart';
+import 'package:shaadi_book/screens/auth_screens/forget_password/reset_password.dart';
 import 'package:shaadi_book/screens/utils/custom_back_button.dart';
 
-class ForgetPassword extends StatefulWidget {
-  const ForgetPassword({super.key});
+import '../../Controller/forget_password_controller.dart';
+
+class EmailForgetScreen extends StatefulWidget {
+  const EmailForgetScreen({super.key});
 
   @override
-  State<ForgetPassword> createState() => _ForgetPasswordState();
+  State<EmailForgetScreen> createState() => _EmailForgetScreenState();
 }
 
-class _ForgetPasswordState extends State<ForgetPassword> {
+class _EmailForgetScreenState extends State<EmailForgetScreen> {
+  final controller = TextEditingController();
+  final focusNode = FocusNode();
+  var emailController = TextEditingController();
+
+  final forgetpassword = Get.put(ForgetpasswordController());
+
+  @override
+  void dispose() {
+    controller.dispose();
+    focusNode.dispose();
+    super.dispose();
+  }
+
+  FirebaseAuth auth = FirebaseAuth.instance;
+  String verificationID = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColorConstant.scaffoldColor,
+      backgroundColor: const Color(0xffF5F5F5),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.only(
@@ -35,7 +59,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     const SizedBox(height: 24.0),
                     // Title
                     Text(
-                      'Forgot password?',
+                      'Forget Password',
                       style: TextStyle(
                         fontFamily: kantumruy,
                         color: AppColorConstant.fontColor,
@@ -46,7 +70,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     ),
                     // sub Title
                     Text(
-                      'Select which contact details should we use to reset your password',
+                      'Enter your email for the verification process.',
                       style: TextStyle(
                         fontFamily: kantumruy,
                         color: AppColorConstant.fontColor,
@@ -54,12 +78,11 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    const SizedBox(height: 18.0),
-                    // Mobile Card
-                    const ForgetPasswordCard(isMobile: true, masking: '4657'),
-                    const SizedBox(height: 18.0),
-                    // Email Card
-                    const ForgetPasswordCard(isMobile: false, masking: 'sdf@gmail.com'),
+                    const SizedBox(height: 34.0),
+                    // Email Number Field
+                    EmailTextField(emailController: emailController),
+                    const SizedBox(height: 34.0),
+                    // Otp Field
                   ],
                 ),
               ),
@@ -69,10 +92,11 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
+                      // firebaseService.verifiyOtp(context, controller.text);
                       Navigator.push(
                         context,
                         CupertinoPageRoute(
-                          builder: (context) =>  OtpVerification(),
+                          builder: (context) => const ResetPassword(),
                         ),
                       );
                     },

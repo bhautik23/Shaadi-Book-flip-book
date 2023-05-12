@@ -1,34 +1,47 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:shaadi_book/my_app_config/app_color_constants.dart';
 import 'package:shaadi_book/my_app_config/app_font_family.dart';
 import 'package:shaadi_book/my_app_config/app_font_size_constants.dart';
-import 'package:shaadi_book/screens/auth_screens/custom_form_text_field/confirm_password_field.dart';
-import 'package:shaadi_book/screens/auth_screens/custom_form_text_field/password_field.dart';
-import 'package:shaadi_book/screens/utils/alert_screen.dart';
+import 'package:shaadi_book/screens/auth_screens/custom_form_text_field/phonenumber_text_field.dart';
 import 'package:shaadi_book/screens/utils/custom_back_button.dart';
 
-import '../../../Controller/reset_password_controller.dart';
-import '../custom_form_text_field/email_text_field.dart';
+import '../../Controller/forget_password_controller.dart';
 
-class ResetPassword extends StatefulWidget {
-  const ResetPassword({super.key});
+class PhoneNumberForget extends StatefulWidget {
+  const PhoneNumberForget({super.key});
 
   @override
-  State<ResetPassword> createState() => _ResetPasswordState();
+  State<PhoneNumberForget> createState() => _PhoneNumberForgetState();
 }
 
-class _ResetPasswordState extends State<ResetPassword> {
-  final passwordController = TextEditingController();
-  final confPasswordController = TextEditingController();
-  final emailController = TextEditingController();
-  final resetpassword = Get.put(Resetpassword());
+class _PhoneNumberForgetState extends State<PhoneNumberForget> {
+  final controller = TextEditingController();
+  final focusNode = FocusNode();
+  var phonenumberController = TextEditingController();
+
+  final forgetpassword = Get.put(ForgetpasswordController());
+
+  @override
+  void dispose() {
+    controller.dispose();
+    focusNode.dispose();
+    super.dispose();
+  }
+
+  FirebaseAuth auth = FirebaseAuth.instance;
+  String verificationID = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColorConstant.scaffoldColor,
+      backgroundColor: const Color(0xffF5F5F5),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.only(
@@ -45,7 +58,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     const SizedBox(height: 24.0),
                     // Title
                     Text(
-                      'Reset your password here',
+                      'Enter 10-digit mobile number',
                       style: TextStyle(
                         fontFamily: kantumruy,
                         color: AppColorConstant.fontColor,
@@ -56,7 +69,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     ),
                     // sub Title
                     Text(
-                      'Select which contact details should we use to reset your password',
+                      'Code send to +91 12345**** .\n',
                       style: TextStyle(
                         fontFamily: kantumruy,
                         color: AppColorConstant.fontColor,
@@ -64,23 +77,23 @@ class _ResetPasswordState extends State<ResetPassword> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    const SizedBox(height: 24.0),
-                    // Email Number Field
-                    EmailTextField(
-                        emailController: resetpassword.emailConteroller),
-                    const SizedBox(height: 24.0),
-                    // New PAssword
-                    PasswordField(
-                      passwordController: resetpassword.passwordConteroller,
-                      hint: 'New Password',
+                    const SizedBox(height: 34.0),
+                    // Phone Number Field
+                    PhonenumberTextFiled(
+                      phonenumberController: forgetpassword.phoneController,
+                      colors: Color(0xffB1B9C6),
                     ),
-                    const SizedBox(height: 18.0),
-                    // Confirm PAssword
-                    ConfirmPasswordField(
-                      confPasswordController:
-                          resetpassword.c_passwordConteroller,
-                      hint: 'Confirm Password',
-                    ),
+                    // MaterialButton(
+                    //   onPressed: () async {
+                    //     firebaseService.sendOtp(
+                    //         phonenumberController: phonenumberController.text);
+                    //   },
+                    //   child: Text("Send OTP"),
+                    //   color: Colors.deepPurple.withOpacity(.9),
+                    //   elevation: 0,
+                    // ),
+                    const SizedBox(height: 34.0),
+                    // Otp Field
                   ],
                 ),
               ),
@@ -90,7 +103,14 @@ class _ResetPasswordState extends State<ResetPassword> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      resetpassword.resetPassword(context);
+                      forgetpassword.forgetPhonePassword(context);
+                      // firebaseService.verifiyOtp(context, controller.text);
+                      // Navigator.push(
+                      //   context,
+                      //   CupertinoPageRoute(
+                      //     builder: (context) => const ResetPassword(),
+                      //   ),
+                      // );
                     },
                     child: const Text('Next'),
                   ),

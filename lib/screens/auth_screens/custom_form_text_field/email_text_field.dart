@@ -5,20 +5,17 @@ import 'package:shaadi_book/my_app_config/app_font_family.dart';
 import 'package:shaadi_book/my_app_config/app_font_size_constants.dart';
 
 class EmailTextField extends StatelessWidget {
-  const EmailTextField({
-    Key? key,
-    required TextEditingController emailController,
-  })  : _emailController = emailController,
-        super(key: key);
-
-  final TextEditingController _emailController;
+  TextEditingController emailController;
+  var function;
+  EmailTextField({Key? key, required this.emailController,this.function}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onChanged: function,
       keyboardType: TextInputType.text,
       autofocus: false,
-      controller: _emailController,
+      controller: emailController,
       style: TextStyle(
         fontWeight: FontWeight.normal,
         fontFamily: kantumruy,

@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shaadi_book/main.dart';
 import 'package:shaadi_book/screens/auth_screens/auth_common.dart';
 import 'package:shaadi_book/screens/get_started/get_started_item.dart';
+import 'package:shaadi_book/screens/home/home.dart';
 
 class GetStarted extends StatefulWidget {
   const GetStarted({super.key});
@@ -41,8 +43,7 @@ class _GetStartedState extends State<GetStarted> {
                   GetStartedItem(
                     imagePath: "assets/images/get_started_third.png",
                     title: "Cherish Your Wedding",
-                    subTitle:
-                        "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...",
+                    subTitle:"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...",
                     selectedIndex: 2,
                   ),
                 ],
@@ -166,14 +167,14 @@ class _GetStartedState extends State<GetStarted> {
       floatingActionButton: Align(
         alignment: Alignment.bottomRight,
         child: InkWell(
-          onTap: () async {            
+          onTap: () async {
             // const platform = MethodChannel("mycall");
             // var result =
             //     await platform.invokeMethod("mycall", {"text": "Mostak"});
             Navigator.push(
               context,
               CupertinoPageRoute(
-                builder: (context) => const AuthCommon(),
+                builder: (context) => dataStorage.read('login_token') == null ? const AuthCommon() : Home(),
               ),
             );
           },

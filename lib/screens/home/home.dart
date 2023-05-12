@@ -12,7 +12,8 @@ import '../utils/custom_navigation_bar/gbutton.dart';
 import '../utils/custom_navigation_bar/gnav.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  String? name;
+  Home({super.key, this.name});
 
   @override
   State<Home> createState() => _HomeState();

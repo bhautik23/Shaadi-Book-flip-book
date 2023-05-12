@@ -1,15 +1,13 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'dart:math' as math;
 
 import 'package:shaadi_book/screens/event_screens/album_grid_item.dart';
+
+import '../../Controller/getprojectdata_controller_api.dart';
 
 class AlbumGrid extends StatefulWidget {
   const AlbumGrid({super.key});
@@ -56,6 +54,15 @@ class _AlbumGridState extends State<AlbumGrid> {
     // "6.png",
   ];
 
+  final getAlubmDdata = Get.put(GetProjectDataController());
+
+
+  @override
+  void initState() {
+    // getAlubmDdata.getProjectData(eventId: ,id: );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // Grid count for Staggered Grid
@@ -65,7 +72,8 @@ class _AlbumGridState extends State<AlbumGrid> {
         crossAxisCount: 4,
         mainAxisSpacing: 12,
         crossAxisSpacing: 12,
-        children: _listImages.map((e) {
+        children: getAlubmDdata.data.map((e) {
+          print(e);
           // int _currentIndex = _listImages.indexOf(e);
           if (count == 7) {
             count = 0;
@@ -73,7 +81,7 @@ class _AlbumGridState extends State<AlbumGrid> {
             count++;
           }
           return AlbumGridItem(
-            image: e,
+            image: e.toString(),
             staggeredGridCount: count - 1,
           );
         }).toList(),

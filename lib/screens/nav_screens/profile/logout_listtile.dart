@@ -1,9 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shaadi_book/main.dart';
 import 'package:shaadi_book/my_app_config/app_color_constants.dart';
 import 'package:shaadi_book/my_app_config/app_font_size_constants.dart';
+import 'package:shaadi_book/screens/auth_screens/auth_common.dart';
 
 import '../../../my_app_config/app_font_family.dart';
 
@@ -46,7 +49,16 @@ class _LogoutListTileState extends State<LogoutListTile> {
         bottom: 0.0,
         left: 24.0,
       ),
-      onTap: () {},
+      onTap: () {
+        dataStorage.remove('login_token');
+        setState(() {});
+        Navigator.push(
+          context,
+          CupertinoPageRoute(
+            builder: (context) => const AuthCommon(),
+          ),
+        );
+      },
     );
   }
 }
